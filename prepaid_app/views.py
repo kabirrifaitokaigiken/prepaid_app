@@ -12,11 +12,16 @@ from django.contrib import messages
 def dashboard(request):
     prepaid = Prepaid.objects.filter(user=request.user).first()
 
-    qr_filename = generate_qr(prepaid.prepaid_no)
+    # 🔥 HANDLE ERROR kalau prepaid belum ada
+    if not prepaid:
+        messages.error(request, "Data prepaid belum ada")
+        return redirect('/login/')
+
+    qr_image = generate_qr(prepaid.prepaid_no)
 
     return render(request, "prepaid_app/dashboard.html", {
         "data": prepaid,
-        "qr_path": qr_filename
+        "qr_image": qr_image
     })
 
 @login_required
@@ -29,17 +34,31 @@ def view_qr(request):
         "qr_image": qr_image
     })
 
+from django.contrib.auth.models import User
+
 def register(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('/')
-    else:
-        form = RegisterForm()
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-    return render(request, 'prepaid_app/register.html', {'form': form})
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists!")
+            return redirect('/register/')
+
+        user = User.objects.create_user(username=username, password=password)
+
+        # auto create prepaid
+        Prepaid.objects.create(
+            user=user,
+            prepaid_no="1234567890",
+            current_balance=0,
+            expired_date="2030-01-01"
+        )
+
+        messages.success(request, "Register success! Please login")
+        return redirect('/login/')
+
+    return render(request, 'prepaid_app/register.html')
 
 @csrf_exempt
 @login_required
