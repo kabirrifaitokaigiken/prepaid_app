@@ -38,6 +38,7 @@
     <a href="/topup/" class="btn btn-success">Top Up</a>
     <a href="/history/" class="btn btn-secondary">History</a>
     <button class="btn btn-primary" onclick="openModal()">View QR</button>
+    <a href="/logout/" class="btn btn-danger float-end">Logout</a>
 
   </div>
 
@@ -52,7 +53,7 @@
 
       <!-- ✅ CENTER QR -->
       <div class="d-flex justify-content-center">
-        <img src="/media/{{ qr_path }}" width="200" class="img-fluid">
+        <img src="data:image/png;base64,{{ qr_image }}" width="200">
       </div>
 
       <button class="btn btn-danger mt-4" data-bs-dismiss="modal">Close</button>

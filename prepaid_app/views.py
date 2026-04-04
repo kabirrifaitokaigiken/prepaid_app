@@ -23,10 +23,10 @@ def dashboard(request):
 def view_qr(request):
     prepaid = Prepaid.objects.filter(user=request.user).first()
 
-    qr_filename = generate_qr(prepaid.prepaid_no)
+    qr_image = generate_qr(prepaid.prepaid_no)
 
     return render(request, "prepaid_app/qr.html", {
-        "qr_path": qr_filename
+        "qr_image": qr_image
     })
 
 def register(request):
@@ -40,7 +40,6 @@ def register(request):
         form = RegisterForm()
 
     return render(request, 'prepaid_app/register.html', {'form': form})
-
 
 @csrf_exempt
 @login_required
