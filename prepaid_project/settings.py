@@ -25,8 +25,14 @@ SECRET_KEY = 'django-insecure-@l)4ci#n)+-01f6yjpe2$y^%fmkww3ti=k*%2_533&#0rb^oj$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']  # sementara biar gampang debug
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://prepaid-app-123-ffcxehchbah2b3gj.southeastasia-01.azurewebsites.net'
+]
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -109,8 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login/'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
